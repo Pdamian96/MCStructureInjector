@@ -5,11 +5,7 @@ import random, json
 
 CELL_SIZE = 8
 
-STRUCTURE_TYPES = {
-    "FLOATING_ABOVE_GROUND": {"id": 0},
-    "ON_GROUND": {"id": 1},
-    "UNDER_GROUND": {"id": 2}
-}
+
 
 class StructurePlacementApp:
     def __init__(self, root):
@@ -25,7 +21,8 @@ class StructurePlacementApp:
         self.generate()
 
     def _build_controls(self):
-        # World size X/Z
+
+
         ttk.Label(self.root, text="World Size X (chunks):").grid(row=0, column=1, sticky="w")
         self.world_x_var = tk.IntVar(value=128)
         ttk.Entry(self.root, textvariable=self.world_x_var, width=10).grid(row=0, column=2, sticky="w")
@@ -53,13 +50,10 @@ class StructurePlacementApp:
         ttk.Entry(self.root, textvariable=self.structure_id, width=10).grid(row=4, column=2, sticky="w")
 
 
-
-        # Fill rate (probability)
         ttk.Label(self.root, text="Placement chance (0-1):").grid(row=4, column=3, sticky="w")
         self.fill_rate_var = tk.DoubleVar(value=0.8)
         ttk.Entry(self.root, textvariable=self.fill_rate_var, width=10).grid(row=4, column=4, sticky="w")
 
-        # Seed and buttons
         ttk.Label(self.root, text="Seed:").grid(row=5, column=1, sticky="w")
         self.seed_var = tk.StringVar(value="42")
         ttk.Entry(self.root, textvariable=self.seed_var, width=10).grid(row=5, column=2, sticky="w")
@@ -70,8 +64,6 @@ class StructurePlacementApp:
 
 
     # --- Algorithm ---
-
-
     def generate_region_based(self, world_x, world_z, y_min, y_max, region_size, fill_rate, structure_id, seed=None):
         if seed:
             random.seed(seed)
@@ -82,11 +74,13 @@ class StructurePlacementApp:
                 if random.random() > fill_rate:
                     continue
 
-                # Add small jitter
+
                 chunk_x = region_x + random.randint(-2, region_size + 1)
                 chunk_z = region_z + random.randint(-2, region_size + 1)
                 chunk_x = max(0, min(world_x - 1, chunk_x))
                 chunk_z = max(0, min(world_z - 1, chunk_z))
+
+
 
 
                 y = 0
@@ -98,11 +92,9 @@ class StructurePlacementApp:
                     y_max = y_min
 
 
-
                 placements.append((chunk_x, chunk_z, y, structure_id))
         return placements
 
-    # --- GUI Logic ---
 
     def generate(self):
         self.canvas.delete("all")
